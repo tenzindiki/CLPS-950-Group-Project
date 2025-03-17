@@ -1,0 +1,231 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+<title>soduko_grid</title>
+<meta name="generator" content="MATLAB 24.2">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2025-03-17">
+<meta name="DC.source" content="soduko_grid.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style>
+</head>
+<body>
+<div class="content">
+<pre class="codeinput">clc; clear; close <span class="string">all</span>;
+
+<span class="comment">% Ask user for grid size</span>
+n = input(<span class="string">'Enter grid size (4 or 9): '</span>);
+<span class="keyword">if</span> n ~= 4 &amp;&amp; n ~= 9
+    error(<span class="string">'Invalid input. Please enter 4 or 9.'</span>);
+<span class="keyword">end</span>
+
+sudokuGrid = generateSudoku(n); <span class="comment">% Generate a filled Sudoku grid</span>
+
+<span class="comment">% Ask user for difficulty level</span>
+difficultyLevels = [2, 4, 6, 8, 10]; <span class="comment">% Number of blanks for 4x4, scale for 9x9</span>
+difficulty = input(<span class="string">'Select difficulty (1-5): '</span>);
+<span class="keyword">if</span> difficulty &lt; 1 || difficulty &gt; 5
+    error(<span class="string">'Invalid difficulty. Choose between 1 and 5.'</span>);
+<span class="keyword">end</span>
+
+numBlanks = round(difficultyLevels(difficulty) * (n/4)^2);
+sudokuGrid = createBlanks(sudokuGrid, numBlanks);
+
+<span class="comment">% Display the grid</span>
+figure;
+imagesc(sudokuGrid);
+colormap([1 1 1]); <span class="comment">% Set colormap to white</span>
+axis <span class="string">equal</span>;
+ax = gca;
+ax.XColor = <span class="string">'k'</span>;
+ax.YColor = <span class="string">'k'</span>;
+ax.XTick = 0.5:1:n+0.5;
+ax.YTick = 0.5:1:n+0.5;
+ax.XTickLabel = [];
+ax.YTickLabel = [];
+grid <span class="string">on</span>;
+
+<span class="comment">% Determine bold grid lines based on size</span>
+subGridSize = 2; <span class="comment">% Default for 4x4</span>
+<span class="keyword">if</span> n == 9
+    subGridSize = 3;
+<span class="keyword">end</span>
+
+<span class="comment">% Draw bold lines for sub-grids</span>
+hold <span class="string">on</span>;
+<span class="keyword">for</span> i = 0:(n/subGridSize)
+    x = [0.5, n+0.5];
+    y = [i*subGridSize+0.5, i*subGridSize+0.5];
+    plot(x, y, <span class="string">'k'</span>, <span class="string">'LineWidth'</span>, 2);
+    plot(y, x, <span class="string">'k'</span>, <span class="string">'LineWidth'</span>, 2);
+<span class="keyword">end</span>
+hold <span class="string">off</span>;
+
+title([<span class="string">'Sudoku Grid ('</span>, num2str(n), <span class="string">'x'</span>, num2str(n), <span class="string">')'</span>]);
+
+<span class="comment">% Function to generate a valid filled Sudoku grid</span>
+<span class="keyword">function</span> grid = generateSudoku(n)
+    grid = zeros(n);
+    nums = randperm(n);
+    <span class="keyword">for</span> i = 1:n
+        grid(i, :) = circshift(nums, i-1);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">% Function to create blanks in the Sudoku grid</span>
+<span class="keyword">function</span> grid = createBlanks(grid, count)
+    count = min(count, numel(grid)); <span class="comment">% Ensure count does not exceed grid size</span>
+    indices = randperm(numel(grid), count);
+    grid(indices) = 0;
+<span class="keyword">end</span>
+</pre>
+<pre class="codeoutput error">Error using input
+Cannot call INPUT from EVALC.
+
+Error in soduko_grid (line 4)
+n = input('Enter grid size (4 or 9): ');
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</pre>
+<p class="footer">
+<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024b</a>
+<br>
+</p>
+</div>
+<!--
+##### SOURCE BEGIN #####
+clc; clear; close all;
+
+% Ask user for grid size
+n = input('Enter grid size (4 or 9): ');
+if n ~= 4 && n ~= 9
+    error('Invalid input. Please enter 4 or 9.');
+end
+
+sudokuGrid = generateSudoku(n); % Generate a filled Sudoku grid
+
+% Ask user for difficulty level
+difficultyLevels = [2, 4, 6, 8, 10]; % Number of blanks for 4x4, scale for 9x9
+difficulty = input('Select difficulty (1-5): ');
+if difficulty < 1 || difficulty > 5
+    error('Invalid difficulty. Choose between 1 and 5.');
+end
+
+numBlanks = round(difficultyLevels(difficulty) * (n/4)^2); 
+sudokuGrid = createBlanks(sudokuGrid, numBlanks);
+
+% Display the grid
+figure;
+imagesc(sudokuGrid);
+colormap([1 1 1]); % Set colormap to white
+axis equal;
+ax = gca;
+ax.XColor = 'k';
+ax.YColor = 'k';
+ax.XTick = 0.5:1:n+0.5;
+ax.YTick = 0.5:1:n+0.5;
+ax.XTickLabel = [];
+ax.YTickLabel = [];
+grid on;
+
+% Determine bold grid lines based on size
+subGridSize = 2; % Default for 4x4
+if n == 9
+    subGridSize = 3;
+end
+
+% Draw bold lines for sub-grids
+hold on;
+for i = 0:(n/subGridSize)
+    x = [0.5, n+0.5];
+    y = [i*subGridSize+0.5, i*subGridSize+0.5];
+    plot(x, y, 'k', 'LineWidth', 2);
+    plot(y, x, 'k', 'LineWidth', 2);
+end
+hold off;
+
+title(['Sudoku Grid (', num2str(n), 'x', num2str(n), ')']);
+
+% Function to generate a valid filled Sudoku grid
+function grid = generateSudoku(n)
+    grid = zeros(n);
+    nums = randperm(n);
+    for i = 1:n
+        grid(i, :) = circshift(nums, i-1);
+    end
+end
+
+% Function to create blanks in the Sudoku grid
+function grid = createBlanks(grid, count)
+    count = min(count, numel(grid)); % Ensure count does not exceed grid size
+    indices = randperm(numel(grid), count);
+    grid(indices) = 0;
+end
+##### SOURCE END #####
+-->
+</body>
+</html>
