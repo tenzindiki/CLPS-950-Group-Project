@@ -1,5 +1,3 @@
-
-
 clc; clear; close all;
 
 % Ask user for grid size
@@ -18,7 +16,6 @@ if difficulty < 1 || difficulty > 5
 end
 
 numBlanks = round(difficultyLevels(difficulty) * (n/4)^2); 
-
 sudokuGrid = createBlanks(sudokuGrid, numBlanks);
 
 % Display the grid
