@@ -28,7 +28,7 @@
         elseif strcmp(user_input, 'play')
             row = input('Enter row number (1-9):'); 
             col = input('Enter column number (1-9):'); 
-            num = input('Enter the solution in that location (1-9): ');
+            num = input('Enter the solution in that location (1-9): ')
             if row >= 1 && row <= 9 && col >= 1 && col <= 9 && num >= 1 && num <= 9 % Validate range
                 if sudoku_grid(row, col) == 0  % Ensure the cell is empty
                     if is_valid(sudoku_grid, row, col, num) % Check if valid move
@@ -45,14 +45,15 @@
                     end 
                     else
                         disp('That cell is already filled! Choose an empty cell.');
-                end
-            else
-                disp('Invalid input. Please enter numbers between 1-9.');
             end
         else
-            disp('Invalid input. Please type "play", "hint", "solve it for me", or "exit".');
+            disp('Invalid input. Please enter numbers between 1-9.');
         end
-    end 
+
+    else
+        disp('Invalid input. Please type "play", "hint", "solve it for me", or "exit".');
+    end
+end
 
 function sudoku_grid = Sudoku_Proj_CLPS0950()
     num_of_blanks = [20,30,40,50,60]; % possible number of blanks
