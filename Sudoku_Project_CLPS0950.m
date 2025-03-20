@@ -75,7 +75,7 @@ function sudoku_grid = generate_sudoku()
     base_grid = reshape(randperm(9), [3,3]); % generates random block of dimensions 3 by 3
    
     % creates first three rows using row shifting
-    sudoku_grid(1:3, 1:3) = base_grid; v
+    sudoku_grid(1:3, 1:3) = base_grid;
     sudoku_grid(1:3, 4:6) = circshift(base_grid, -1, 1);
     sudoku_grid(1:3, 7:9) = circshift(base_grid, -2, 1);
 
