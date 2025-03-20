@@ -1,4 +1,5 @@
-% code for generating sudoku grid
+% code for generating sudoku grid and interactive play component: Ariella
+% and Tenzin (both acting as driver and observer at various points)
     fprintf('Welcome to our Sudoku!\n'); % welcome message
     fprintf('If you would like a hint, feel free to type the word "hint" at any point during the game. \n'); fprintf('If you would like the game to be solved for you, just type "solve it for me"! \n');
     fprintf('If you would like to quit the game, please type "exit." \n');
@@ -74,7 +75,7 @@ function sudoku_grid = generate_sudoku()
     base_grid = reshape(randperm(9), [3,3]); % generates random block of dimensions 3 by 3
    
     % creates first three rows using row shifting
-    sudoku_grid(1:3, 1:3) = base_grid; 
+    sudoku_grid(1:3, 1:3) = base_grid; v
     sudoku_grid(1:3, 4:6) = circshift(base_grid, -1, 1);
     sudoku_grid(1:3, 7:9) = circshift(base_grid, -2, 1);
 
@@ -111,7 +112,7 @@ function display_sudoku(sudoku_grid)
     end
 end
 
-% code for hint component
+% code for hint component: Ariella (driver); Tenzin (observer)
 function [row, col, num] = find_hint(grid)
     for row = 1:9
         for col = 1:9
@@ -133,7 +134,7 @@ function possible_numbers = find_possible_numbers(grid, row, col)
     possible_numbers = setdiff(all_numbers, used_numbers); % identifies all possible numbers (those that have not been used within a column, row, or subgrid yet)
 end
 
-% code for solver component
+% code for solver component: Ariella (driver); Tenzin (observer)
 function valid = is_valid(board, row, col, num) 
     if any(board(row, :) == num) % checks to see if number is in row
         valid = false; % number is not placed if already in row
