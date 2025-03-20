@@ -1,4 +1,4 @@
-
+% code for generating sudoku grid
     fprintf('Welcome to our Sudoku!\n'); % welcome message
     fprintf('If you would like a hint, feel free to type the word "hint" at any point during the game. \n'); fprintf('If you would like the game to be solved for you, just type "solve it for me"! \n');
     fprintf('If you would like to quit the game, please type "exit." \n');
@@ -29,14 +29,14 @@
             row = input('Enter row number (1-9):'); 
             col = input('Enter column number (1-9):'); 
             num = input('Enter the solution in that location (1-9): ');
-            if row >= 1 && row <= 9 && col >= 1 && col <= 9 && num >= 1 && num <= 9 % Validate range
-                if sudoku_grid(row, col) == 0  % Ensure the cell is empty
-                    if is_valid(sudoku_grid, row, col, num) % Check if valid move
-                        sudoku_grid(row, col) = num; % Place number in grid
-                        disp('Updated Grid:');
-                        display_sudoku(sudoku_grid);
+            if row >= 1 && row <= 9 && col >= 1 && col <= 9 && num >= 1 && num <= 9 % defines range of valid row and column numbers (1-9)
+                if sudoku_grid(row, col) == 0  % checks for empty cell
+                    if is_valid(sudoku_grid, row, col, num) % checks for valid move
+                        sudoku_grid(row, col) = num; % fills in a number
+                        disp('Updated Grid (includes number within grid):'); % new title
+                        display_sudoku(sudoku_grid); % displays updated grid
                         
-                        if all(sudoku_grid(:) > 0) % Check if puzzle is solved
+                        if all(sudoku_grid(:) > 0) % checks to see if puzzle is solved
                             disp('Congratulations! You have completed the Sudoku puzzle!');
                             break;
                         end
@@ -166,7 +166,7 @@ function solved = solve_sudoku(grid)
         return;
     end
     for num = 1:9
-        if is_valid(grid, row, col, num)
+        if is_valid(grid, row, col, num) % checks for valid move
             grid(row, col) = num;  % fills in a number
             if solve_sudoku(grid) % recursively solves puzzle
                 solved = true;  % indicates that puzzle is solved
